@@ -29,4 +29,10 @@ public class GlobalExceptionHandler {
     ErrorMessage exceptionHandler(UnsupportedOperationException exception) {
         return new ErrorMessage(exception.getMessage());
     }
+
+    @ExceptionHandler
+    @ResponseStatus(BAD_REQUEST)
+    ErrorMessage exceptionHandler(RuntimeException exception) {
+        return new ErrorMessage(exception.getMessage());
+    }
 }
