@@ -5,7 +5,7 @@ import com.seb.mobilebankapi.model.entity.Account;
 import org.springframework.stereotype.Component;
 
 @Component
-public class AccountMapper {
+public record AccountMapper() {
     public AccountDto entityToDto(Account account) {
         return new AccountDto(
                 account.getId(),

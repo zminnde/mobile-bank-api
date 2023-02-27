@@ -10,4 +10,5 @@ public record AccountDto(
         BigDecimal balance,
         AccountType accountType
 ) {
+
 }

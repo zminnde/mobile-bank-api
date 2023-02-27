@@ -7,8 +7,8 @@ import com.seb.mobilebankapi.model.dto.TransferMoneyDto;
 import com.seb.mobilebankapi.model.dto.WithdrawMoneyDto;
 import com.seb.mobilebankapi.model.entity.Account;
 import com.seb.mobilebankapi.model.entity.AccountType;
-import com.seb.mobilebankapi.service.mapper.AccountMapper;
 import com.seb.mobilebankapi.repository.AccountRepository;
+import com.seb.mobilebankapi.service.mapper.AccountMapper;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.util.List;
 
-import static com.seb.mobilebankapi.model.entity.AccountType.*;
+import static com.seb.mobilebankapi.model.entity.AccountType.SAVINGS;
 
 @Service
 @AllArgsConstructor
@@ -26,7 +26,7 @@ public class AccountService {
     private final AccountMapper accountMapper;
 
     public AccountDto depositMoney(String accountNumber, DepositMoneyDto depositMoneyDto, String authenticatedUserName) {
-        var accountToUpdate = accountRepository.findAccountByAccountNumber(accountNumber);
+        var accountToUpdate = accountRepository.findByAccountNumber(accountNumber);
 
         validateAuthenticatedOperation(accountToUpdate, authenticatedUserName);
 
@@ -36,7 +36,7 @@ public class AccountService {
     }
 
     public AccountDto withdrawMoney(String accountNumber, WithdrawMoneyDto withdrawMoneyDto, String authenticatedUserName) {
-        var accountToUpdate = accountRepository.findAccountByAccountNumber(accountNumber);
+        var accountToUpdate = accountRepository.findByAccountNumber(accountNumber);
 
         validateAuthenticatedOperation(accountToUpdate, authenticatedUserName);
         validateWithdrawalAllowed(accountToUpdate.getAccountType());
@@ -49,10 +49,10 @@ public class AccountService {
 
     @Transactional
     public AccountDto transferMoney(String sourceAccountNumber, TransferMoneyDto transferMoneyDto, String authenticatedUserName) {
-        var sourceAccount = accountRepository.findAccountByAccountNumber(sourceAccountNumber);
+        var sourceAccount = accountRepository.findByAccountNumber(sourceAccountNumber);
         validateAuthenticatedOperation(sourceAccount, authenticatedUserName);
         validateTransferAllowed(sourceAccount.getAccountType());
-        var targetAccount = accountRepository.findAccountByAccountNumber(transferMoneyDto.targetAccountNumber());
+        var targetAccount = accountRepository.findByAccountNumber(transferMoneyDto.targetAccountNumber());
 
         var transferType = resolveTransferType(sourceAccount.getId(), targetAccount.getId());
         validateTransferAmount(transferMoneyDto.amount(), transferType);
@@ -66,12 +66,12 @@ public class AccountService {
 
     private void validateAuthenticatedOperation(Account accountToUpdate, String authenticatedUserName) {
         if (!accountToUpdate.getCustomer().getUserName().equals(authenticatedUserName)) {
-            throw new IllegalArgumentException("Cannot withdraw from another account");
+            throw new IllegalArgumentException("Cannot deposit/withdraw from another user's account");
         }
     }
 
     private void validateWithdrawalAllowed(AccountType accountType) {
-        if (accountType == SAVINGS) {
+        if (accountType.equals(SAVINGS)) {
             throw new UnsupportedOperationException("Cannot withdraw from savings account");
         }
     }

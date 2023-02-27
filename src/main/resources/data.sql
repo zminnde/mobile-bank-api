@@ -1,7 +1,6 @@
 insert into customer
-values (default, 'Mindaugas', 'pass'),
-       (default, 'Petras', 'pass2'),
-       (default, 'zmogus', 'password');
+values (default, 'mindaugas', 'pass'),
+       (default, 'user', 'password');
 
 insert into account
 values ( default, 'LT1', 200, 1, 'REGULAR' ),

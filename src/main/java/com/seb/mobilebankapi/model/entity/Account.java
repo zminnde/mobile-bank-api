@@ -1,15 +1,15 @@
 package com.seb.mobilebankapi.model.entity;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.math.BigDecimal;
 
 @Entity
 @Getter
 @Setter
-@Builder
-@AllArgsConstructor
 @NoArgsConstructor
 public class Account {
     @Id
@@ -19,7 +19,6 @@ public class Account {
     private BigDecimal balance;
     @ManyToOne
     private Customer customer;
-//    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private AccountType accountType;
 }
