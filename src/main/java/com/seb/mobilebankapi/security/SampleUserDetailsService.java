@@ -10,9 +10,12 @@ import org.springframework.stereotype.Service;
 import static com.seb.mobilebankapi.util.DataAccessUtils.getEntity;
 
 @Service
-public record SampleUserDetailsService(
-        CustomerRepository customerRepository
-) implements UserDetailsService {
+public final class SampleUserDetailsService implements UserDetailsService {
+    private final CustomerRepository customerRepository;
+
+    public SampleUserDetailsService(CustomerRepository customerRepository) {
+        this.customerRepository = customerRepository;
+    }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

@@ -11,10 +11,14 @@ import static com.seb.mobilebankapi.util.DataAccessUtils.getEntity;
 import static com.seb.mobilebankapi.util.OperationValidationUtils.validateAuthorizedOperation;
 
 @Service
-public record CustomerService(
-        CustomerRepository customerRepository,
-        AccountMapper accountMapper
-) {
+public final class CustomerService {
+    private final CustomerRepository customerRepository;
+    private final AccountMapper accountMapper;
+
+    public CustomerService(CustomerRepository customerRepository, AccountMapper accountMapper) {
+        this.customerRepository = customerRepository;
+        this.accountMapper = accountMapper;
+    }
 
     public List<AccountDto> getAccountsById(Long id, String authenticatedUserName) {
         var customer = getEntity(customerRepository::findById, id);

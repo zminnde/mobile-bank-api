@@ -32,7 +32,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler
     @ResponseStatus(BAD_REQUEST)
-    ErrorMessage exceptionHandler(RuntimeException exception) {
-        return new ErrorMessage(exception.getMessage());
+    ErrorMessage exceptionHandler(Exception exception) {
+        return new ErrorMessage("Something went wrong");
     }
 }

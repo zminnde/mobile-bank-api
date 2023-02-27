@@ -8,7 +8,10 @@ import java.math.BigDecimal;
 
 import static com.seb.mobilebankapi.model.entity.AccountType.SAVINGS;
 
-public record OperationValidationUtils() {
+public final class OperationValidationUtils {
+
+    private OperationValidationUtils() {
+    }
 
     public static void validateWithdrawalAllowed(Account accountToUpdate, String authenticatedUserName, BigDecimal amount) {
         validateAuthorizedOperation(accountToUpdate.getCustomer().getUserName(), authenticatedUserName);
@@ -28,7 +31,7 @@ public record OperationValidationUtils() {
     }
 
     private static void validateAccountType(AccountType accountType) {
-        if (accountType.equals(SAVINGS)) {
+        if (SAVINGS.equals(accountType)) {
             throw new UnsupportedOperationException("Operation not allowed");
         }
     }
