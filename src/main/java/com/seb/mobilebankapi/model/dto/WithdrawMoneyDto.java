@@ -1,4 +1,5 @@
 package com.seb.mobilebankapi.model.dto;
+
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Digits;
 

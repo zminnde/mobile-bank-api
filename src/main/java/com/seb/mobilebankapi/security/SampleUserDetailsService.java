@@ -1,12 +1,13 @@
 package com.seb.mobilebankapi.security;
 
 import com.seb.mobilebankapi.repository.CustomerRepository;
-import jakarta.persistence.EntityNotFoundException;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+
+import static com.seb.mobilebankapi.util.DataAccessUtils.getEntity;
 
 @Service
 public record SampleUserDetailsService(
@@ -15,10 +16,7 @@ public record SampleUserDetailsService(
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        var customer = customerRepository.findByUserName(username);
-        if (customer == null) {
-            throw new EntityNotFoundException("Customer not found");
-        }
+        var customer = getEntity(customerRepository::findByUserName, username);
         return User.withDefaultPasswordEncoder()
                 .username(customer.getUserName())
                 .password(customer.getPassword())

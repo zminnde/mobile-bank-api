@@ -3,10 +3,12 @@ package com.seb.mobilebankapi.service;
 import com.seb.mobilebankapi.model.dto.AccountDto;
 import com.seb.mobilebankapi.repository.CustomerRepository;
 import com.seb.mobilebankapi.service.mapper.AccountMapper;
-import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+
+import static com.seb.mobilebankapi.util.DataAccessUtils.getEntity;
+import static com.seb.mobilebankapi.util.OperationValidationUtils.validateAuthorizedOperation;
 
 @Service
 public record CustomerService(
@@ -15,12 +17,12 @@ public record CustomerService(
 ) {
 
     public List<AccountDto> getAccountsById(Long id, String authenticatedUserName) {
-        return customerRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Customer with id: %s not found".formatted(id)))
+        var customer = getEntity(customerRepository::findById, id);
+        validateAuthorizedOperation(customer.getUserName(), authenticatedUserName);
+        return customer
                 .getAccounts()
                 .stream()
                 .map(accountMapper::entityToDto)
                 .toList();
     }
-
 }
