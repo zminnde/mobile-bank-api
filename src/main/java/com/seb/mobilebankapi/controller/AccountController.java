@@ -19,7 +19,7 @@ public record AccountController(
         CustomerService customerService
 ) {
 
-    @GetMapping()
+    @GetMapping
     public List<AccountDto> getAccountsByCustomerId(@RequestParam Long customerId, Principal principal) {
         return customerService.getAccountsById(customerId, principal.getName());
     }

@@ -20,7 +20,7 @@ public final class OperationValidationUtils {
     }
 
     public static void validateTransferAllowed(Account sourceAccount, Account targetAccount, BigDecimal amount) {
-        var transferType = resolveTransferType(sourceAccount.getId(), targetAccount.getId());
+        var transferType = resolveTransferType(sourceAccount.getCustomer().getId(), targetAccount.getCustomer().getId());
         validateTransferAmount(amount, transferType);
     }
 
